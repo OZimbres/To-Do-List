@@ -99,8 +99,6 @@ public class ToDoList extends JFrame {
             filterTasks();
         });
 
-
-
         //-----===Configurações de Exibição===-----//
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(450, 300);
