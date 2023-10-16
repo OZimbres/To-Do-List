@@ -14,6 +14,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class ToDoList extends JFrame {
     // -----===ATRIBUTOS===-----//
@@ -37,6 +39,7 @@ public class ToDoList extends JFrame {
 
     // -----===CONSTRUTOR===-----//
     public ToDoList() {
+        
         // Contrutor herdado
         super("To-Do List App");
 
@@ -104,6 +107,29 @@ public class ToDoList extends JFrame {
         filterComboBox.addItemListener(e -> {
             filterTasks();
         });
+        taskInputField.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                // Este método é chamado quando uma tecla é digitada (pressionada e liberada).
+                char keyChar = e.getKeyChar();
+                if (keyChar == KeyEvent.VK_ENTER) {
+                    // Se a tecla Enter for pressionada, adicione a tarefa
+                    addTask();
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                // Este método é chamado quando uma tecla é pressionada.
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                // Este método é chamado quando uma tecla é liberada.
+            }
+        });
+
+
 
         // -----===Configurações de Exibição===-----//
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -125,6 +151,7 @@ public class ToDoList extends JFrame {
             JOptionPane.showMessageDialog(null, "Adicione Uma Tarefa a Ser Feita!", "Alerta",
                     JOptionPane.WARNING_MESSAGE);
         }
+        
     }
 
     // Remover tarefa (Botão Remover)
@@ -191,6 +218,7 @@ public class ToDoList extends JFrame {
 
     }
 
+    
     // Método pra atualizar exibição
     private void updateTaskList() {
         // Atualiza a lista de tasks exibida na GUI
