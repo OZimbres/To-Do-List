@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -117,6 +118,9 @@ public class ToDoList extends JFrame {
             tasks.add(newTask);
             updateTaskList();
             taskInputField.setText("");
+        } else { 
+            JOptionPane.showMessageDialog(null, "Adicione uma tarefa á Ser Feita!", "Alerta",
+            JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -137,7 +141,7 @@ public class ToDoList extends JFrame {
         if (selectedIndex >= 0 && selectedIndex < tasks.size()) {
             Task task = tasks.get(selectedIndex);
             task.setFeito(true);
-            task.setDescricao(task.getDescricao()+" (Concluída)"); //Facilitando visualização das tarefas concluídas
+            task.setDescricao(task.getDescricao()+" (Concluída) \u2714"); //Facilitando visualização das tarefas concluídas
             updateTaskList();
         }
     }
@@ -181,4 +185,5 @@ public class ToDoList extends JFrame {
         //Exibe janela
         this.setVisible(true);
     }
+    
 }
