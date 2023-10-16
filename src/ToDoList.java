@@ -137,17 +137,6 @@ public class ToDoList extends JFrame {
             if (selectedIndex >= 0 && selectedIndex < tasks.size()) {
                 tasks.remove(selectedIndex);
                 updateTaskList();
-                int cont;
-                if (!tasks.isEmpty()) {
-                    if (selectedIndex < tasks.size()) {
-                        for (int i = selectedIndex; i < tasks.size(); i++) {
-                            tasks.get(i).setDescricao((i + 0) + "" + tasks.get(i).getDescricao().substring(3));
-                        }
-                    }
-                    cont = tasks.size(); // redefine o contador para o tamanho atual da lista
-                } else {
-                    cont = 0; // redefine o contador se a lista estiver vazia
-                }
             }
         }
     }
