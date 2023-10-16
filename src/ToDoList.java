@@ -126,11 +126,26 @@ public class ToDoList extends JFrame {
 
     //Remover tarefa (Botão Remover)
     private void deleteTask() {
-        // Exclui a task selecionada da lista de tasks
-        int selectedIndex = taskList.getSelectedIndex();
-        if (selectedIndex >= 0 && selectedIndex < tasks.size()) {
-            tasks.remove(selectedIndex);
-            updateTaskList();
+        if (JOptionPane.showConfirmDialog(null, "Deseja Excluir Essa Tarefa?",
+                "Excluindo Tarefa...", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+
+            // Exclui a task selecionada da lista de tasks
+            int selectedIndex = taskList.getSelectedIndex();
+            if (selectedIndex >= 0 && selectedIndex < tasks.size()) {
+                tasks.remove(selectedIndex);
+                updateTaskList();
+                int cont;
+                if (!tasks.isEmpty()) {
+                    if (selectedIndex < tasks.size()) {
+                        for (int i = selectedIndex; i < tasks.size(); i++) {
+                            tasks.get(i).setDescricao((i + 1) + ". " + tasks.get(i).getDescricao().substring(3));
+                        }
+                    }
+                    cont = tasks.size(); // redefine o contador para o tamanho atual da lista
+                } else {
+                    cont = 0; // redefine o contador se a lista estiver vazia
+                }
+            }
         }
     }
 
@@ -160,8 +175,10 @@ public class ToDoList extends JFrame {
 
     //Limpar tarefas concluídas (Botão Limpar Concluídas)
     private void clearCompletedTasks() {
-        // Limpa todas as tasks concluídas da lista
-        List<Task> completedTasks = new ArrayList<>();
+        if (JOptionPane.showConfirmDialog(null, "Deseja Excluir Essa Tarefa?",
+                "Excluindo Tarefa...", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+
+            List<Task> completedTasks = new ArrayList<>();
         for (Task task : tasks) {
             if (task.isFeito()) {
                 completedTasks.add(task);
@@ -169,6 +186,8 @@ public class ToDoList extends JFrame {
         }
         tasks.removeAll(completedTasks);
         updateTaskList();
+        }
+        
     }
 
     //Método pra atualizar exibição
