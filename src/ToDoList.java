@@ -122,7 +122,7 @@ public class ToDoList extends JFrame {
             updateTaskList();
             taskInputField.setText("");
         } else {
-            JOptionPane.showMessageDialog(null, "Adicione uma tarefa á Ser Feita!", "Alerta",
+            JOptionPane.showMessageDialog(null, "Adicione Uma Tarefa a Ser Feita!", "Alerta",
                     JOptionPane.WARNING_MESSAGE);
         }
     }
@@ -141,7 +141,7 @@ public class ToDoList extends JFrame {
                 if (!tasks.isEmpty()) {
                     if (selectedIndex < tasks.size()) {
                         for (int i = selectedIndex; i < tasks.size(); i++) {
-                            tasks.get(i).setDescricao((i + 1) + ". " + tasks.get(i).getDescricao().substring(3));
+                            tasks.get(i).setDescricao((i + 0) + "" + tasks.get(i).getDescricao().substring(3));
                         }
                     }
                     cont = tasks.size(); // redefine o contador para o tamanho atual da lista
