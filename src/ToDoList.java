@@ -141,21 +141,25 @@ public class ToDoList extends JFrame {
         }
     }
 
-    // Marcar tarefa como concluída (Botão Concluir)
+    //botão para  marcar as tasks como concluidas
     private void markTaskDone() {
-        if (JOptionPane.showConfirmDialog(null, "Deseja Concluir Esta Tarefa?",
-                "Concluindo Tarefa...", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-            // Marca a task selecionada como concluída
-            int selectedIndex = taskList.getSelectedIndex();
-            if (selectedIndex >= 0 && selectedIndex < tasks.size()) {
-                Task task = tasks.get(selectedIndex);
-                task.setFeito(true);
-                task.setDescricao(task.getDescricao() + " (Concluída) \u2714"); // Facilitando visualização das tarefas
-                                                                                // concluídas
-                updateTaskList();
+        int selectedIndex = taskList.getSelectedIndex();
+    
+        if (selectedIndex >= 0 && selectedIndex < tasks.size()) {
+            Task task = tasks.get(selectedIndex);
+    
+            if (!task.isFeito()) { // Verifica se a tarefa já não está concluída
+                if (JOptionPane.showConfirmDialog(null, "Deseja Concluir Esta Tarefa?",
+                        "Concluindo Tarefa...", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    // Marca a task selecionada como concluída
+                    task.setFeito(true);
+                    task.setDescricao(task.getDescricao() + " (Concluída) \u2714");
+                    updateTaskList();
+                }
             }
         }
     }
+    
 
     // Filtrar tarefas (ComboBox)
     private void filterTasks() {
