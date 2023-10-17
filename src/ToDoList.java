@@ -15,8 +15,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+
+import java.awt.event.MouseEvent;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.text.SimpleDateFormat;
 
 public class ToDoList extends JFrame {
@@ -133,6 +137,32 @@ public class ToDoList extends JFrame {
                 // Este método é chamado quando uma tecla é liberada.
             }
         });
+
+        taskList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    int selectedIndex = taskList.getSelectedIndex();
+                    if (selectedIndex >= 0 && selectedIndex < tasks.size()) {
+                        // Obtém a tarefa selecionada
+                        Task selectedTask = tasks.get(selectedIndex);
+
+                        // Abre uma janela de diálogo para editar informações da tarefa
+                        String newDescription = JOptionPane.showInputDialog(
+                                ToDoList.this, "Editar Tarefa", selectedTask.getDescricao());
+
+                        if (newDescription != null && !newDescription.isEmpty()) {
+                            // Atualiza a descrição da tarefa
+                            selectedTask.setDescricao(newDescription);
+
+                            // Atualiza a lista de tarefas
+                            updateTaskList();
+                        }
+                    }
+                }
+            }
+        });
+
         taskInputField.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
