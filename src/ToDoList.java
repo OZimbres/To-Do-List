@@ -15,8 +15,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+
+import java.awt.event.MouseEvent;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.text.SimpleDateFormat;
 
 public class ToDoList extends JFrame {
@@ -41,7 +45,7 @@ public class ToDoList extends JFrame {
 
     // -----===CONSTRUTOR===-----//
     public ToDoList() {
-        
+
         // Contrutor herdado
         super("To-Do List App");
 
@@ -109,6 +113,56 @@ public class ToDoList extends JFrame {
         filterComboBox.addItemListener(e -> {
             filterTasks();
         });
+        taskList.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                // Este método é chamado quando uma tecla é digitada (pressionada e liberada).
+                char keyChar = e.getKeyChar();
+                if (keyChar == KeyEvent.VK_DELETE) {
+                    // Se a tecla Enter for pressionada, adicione a tarefa
+                    deleteTask();
+                } else if (keyChar == KeyEvent.VK_ENTER) {
+                    // Se a tecla Enter for pressionada, adicione a tarefa
+                    markTaskDone();
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                // Este método é chamado quando uma tecla é pressionada.
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                // Este método é chamado quando uma tecla é liberada.
+            }
+        });
+
+        taskList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    int selectedIndex = taskList.getSelectedIndex();
+                    if (selectedIndex >= 0 && selectedIndex < tasks.size()) {
+                        // Obtém a tarefa selecionada
+                        Task selectedTask = tasks.get(selectedIndex);
+
+                        // Abre uma janela de diálogo para editar informações da tarefa
+                        String newDescription = JOptionPane.showInputDialog(
+                                ToDoList.this, "Editar Tarefa", selectedTask.getDescricao());
+
+                        if (newDescription != null && !newDescription.isEmpty()) {
+                            // Atualiza a descrição da tarefa
+                            selectedTask.setDescricao(newDescription);
+
+                            // Atualiza a lista de tarefas
+                            updateTaskList();
+                        }
+                    }
+                }
+            }
+        });
+
         taskInputField.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -131,8 +185,6 @@ public class ToDoList extends JFrame {
             }
         });
 
-
-
         // -----===Configurações de Exibição===-----//
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(450, 300);
@@ -153,7 +205,7 @@ public class ToDoList extends JFrame {
             JOptionPane.showMessageDialog(null, "Adicione Uma Tarefa a Ser Feita!", "Alerta",
                     JOptionPane.WARNING_MESSAGE);
         }
-        
+
     }
 
     // Remover tarefa (Botão Remover)
@@ -170,27 +222,26 @@ public class ToDoList extends JFrame {
         }
     }
 
-    //botão para  marcar as tasks como concluidas
-   private void markTaskDone() {
-    int selectedIndex = taskList.getSelectedIndex();
+    // botão para marcar as tasks como concluidas
+    private void markTaskDone() {
+        int selectedIndex = taskList.getSelectedIndex();
 
-    if (selectedIndex >= 0 && selectedIndex < tasks.size()) {
-        Task task = tasks.get(selectedIndex);
+        if (selectedIndex >= 0 && selectedIndex < tasks.size()) {
+            Task task = tasks.get(selectedIndex);
 
-        if (!task.isFeito()) { // Verifica se a tarefa já não está concluída
-            if (JOptionPane.showConfirmDialog(null, "Deseja Concluir Esta Tarefa?",
-                    "Concluindo Tarefa...", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                // Marca a task selecionada como concluída
-                task.setFeito(true);
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-                String dataConclusao = dateFormat.format(new Date()); // Obtém a data e hora atuais
-                task.setDescricao(task.getDescricao() + " (Concluída em " + dataConclusao + ") \u2714");
-                updateTaskList();
+            if (!task.isFeito()) { // Verifica se a tarefa já não está concluída
+                if (JOptionPane.showConfirmDialog(null, "Deseja Concluir Esta Tarefa?",
+                        "Concluindo Tarefa...", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    // Marca a task selecionada como concluída
+                    task.setFeito(true);
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                    String dataConclusao = dateFormat.format(new Date()); // Obtém a data e hora atuais
+                    task.setDescricao(task.getDescricao() + " (Concluída em " + dataConclusao + ") \u2714");
+                    updateTaskList();
+                }
             }
         }
     }
-}
-    
 
     // Filtrar tarefas (ComboBox)
     private void filterTasks() {
@@ -222,7 +273,6 @@ public class ToDoList extends JFrame {
 
     }
 
-    
     // Método pra atualizar exibição
     private void updateTaskList() {
         // Atualiza a lista de tasks exibida na GUI
