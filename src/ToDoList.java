@@ -2,7 +2,6 @@
 //-----===IMPORTAÇÕES===-----//
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +10,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -40,10 +38,6 @@ public class ToDoList extends JFrame {
     private JList<String> taskList; // Lista ?
     private DefaultListModel<String> listModel; // Lista ?
     private List<Task> tasks; // Lista que armazena Tarefas
-    
-    //Janela principal
-    private JTextField listNameInput; // Campo para inserir o nome do to-do list
-    private JTextField usernameInput; // Campo para inserir o nome de usuário
 
     // -----===CONSTRUTOR===-----//
     public ToDoList() {
@@ -55,9 +49,6 @@ public class ToDoList extends JFrame {
         // Inicializa o painel principal
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
-        // Inicialização dos campos para nome do to-do list e nome de usuário
-        listNameInput = new JTextField();
-        usernameInput = new JTextField();
 
         // Inicializa a lista de tasks e a lista de tasks concluídas
         tasks = new ArrayList<>(); // Lista que armazena tarefas
@@ -72,20 +63,10 @@ public class ToDoList extends JFrame {
         filterComboBox = new JComboBox<>(new String[] { "Todas", "Ativas", "Concluídas" }); // Combo Box
         clearCompletedButton = new JButton("Limpar Concluídas"); // Botão Limpar Concluídas
 
-        // Configuração do painel para nome do to-do list e nome de usuário
-        JPanel headerPanel = new JPanel(new GridLayout(2, 2));
-        headerPanel.add(new JLabel("Nome do To-Do List:"));
-        headerPanel.add(listNameInput);
-        headerPanel.add(new JLabel("Seu Nome de Usuário:"));
-        headerPanel.add(usernameInput);
-        
         // Configuração do painel de entrada (Painel Superior)
         JPanel inputPanel = new JPanel(new BorderLayout()); // Painel
         inputPanel.add(taskInputField, BorderLayout.CENTER); // Campo para nomear tarefa no centro
         inputPanel.add(addButton, BorderLayout.EAST); // Botão adicionar à direita
-
-        // Adiciona o painel do cabeçalho ao painel principal
-        mainPanel.add(headerPanel, BorderLayout.NORTH);
 
         // Configuração do painel de botões (Painel Inferior)
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT)); // Painel
@@ -103,15 +84,12 @@ public class ToDoList extends JFrame {
         mainPanel.add(buttonPanel, BorderLayout.SOUTH); // Jogando painel dos botões de controle pra baixo
                                                         // ('buttonPanel' está dentro de 'mainPanel')
 
-                                                            
         // Adiciona o painel principal à janela
-        
         this.add(mainPanel);
 
         // -----===EVENT LISTENER===-----//
         // ---=Eventos Simples=---//
         // Tratamento de botão
-        
         addButton.addActionListener(e -> { // Evento para adicionar item
             addTask();
         });
@@ -131,7 +109,6 @@ public class ToDoList extends JFrame {
         filterComboBox.addItemListener(e -> {
             filterTasks();
         });
-        
         taskInputField.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
