@@ -62,8 +62,8 @@ public class ToDoList extends JFrame {
         // Inicializa campos de entrada, botões e JComboBox
         taskInputField = new JTextField(); // Campo para Nomear Tarefa
         addButton = new JButton("Adicionar"); // Botão Adicionar
-        deleteButton = new JButton("Excluir"); /// Botão Excluir
-        markDoneButton = new JButton("Concluir"); /// Botão Concluir
+        deleteButton = new JButton("Excluir"); // Botão Excluir
+        markDoneButton = new JButton("Concluir"); // Botão Concluir
         filterComboBox = new JComboBox<>(new String[] { "Todas", "Ativas", "Concluídas" }); // Combo Box
         clearCompletedButton = new JButton("Limpar Concluídas"); // Botão Limpar Concluídas
 
@@ -80,13 +80,9 @@ public class ToDoList extends JFrame {
         buttonPanel.add(clearCompletedButton); // Botão Limpar Concluídas
 
         // Adiciona os componentes ao painel principal (Exibe tarefas)
-        mainPanel.add(inputPanel, BorderLayout.NORTH); // Jogando painel de inserção de tarefas pra cima ('inputPanel'
-                                                       // está dentro de 'mainPanel')
-        mainPanel.add(new JScrollPane(taskList), BorderLayout.CENTER); // Jogando painel de exibição das tarefas pra
-                                                                       // centro (colocando taskList (Lista ?) como
-                                                                       // scrollPanel)
-        mainPanel.add(buttonPanel, BorderLayout.SOUTH); // Jogando painel dos botões de controle pra baixo
-                                                        // ('buttonPanel' está dentro de 'mainPanel')
+        mainPanel.add(inputPanel, BorderLayout.NORTH); // Jogando painel de inserção de tarefas pra cima ('inputPanel' está dentro de 'mainPanel')
+        mainPanel.add(new JScrollPane(taskList), BorderLayout.CENTER); // Jogando painel de exibição das tarefas pra centro (colocando taskList (Lista ?) como scrollPanel)
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH); // Jogando painel dos botões de controle pra baixo ('buttonPanel' está dentro de 'mainPanel')
 
         // Adiciona o painel principal à janela
         this.add(mainPanel);
@@ -149,8 +145,7 @@ public class ToDoList extends JFrame {
                         Task selectedTask = tasks.get(selectedIndex);
 
                         // Abre uma janela de diálogo para editar informações da tarefa
-                        String newDescription = JOptionPane.showInputDialog(
-                                ToDoList.this, "Editar Tarefa", selectedTask.getDescricao());
+                        String newDescription = JOptionPane.showInputDialog(ToDoList.this, "Editar Tarefa", selectedTask.getDescricao());
 
                         if (newDescription != null && !newDescription.isEmpty()) {
                             // Atualiza a descrição da tarefa
@@ -203,17 +198,14 @@ public class ToDoList extends JFrame {
             updateTaskList();
             taskInputField.setText("");
         } else {
-            JOptionPane.showMessageDialog(null, "Adicione Uma Tarefa a Ser Feita!", "Alerta",
-                    JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Adicione Uma Tarefa a Ser Feita!", "Alerta", JOptionPane.WARNING_MESSAGE);
         }
 
     }
 
     // Remover tarefa (Botão Remover)
     private void deleteTask() {
-        if (JOptionPane.showConfirmDialog(null, "Deseja Excluir Essa Tarefa?",
-                "Excluindo Tarefa...", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-
+        if (JOptionPane.showConfirmDialog(null, "Deseja Excluir Essa Tarefa?", "Excluindo Tarefa...", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             // Exclui a task selecionada da lista de tasks
             int selectedIndex = taskList.getSelectedIndex();
             if (selectedIndex >= 0 && selectedIndex < tasks.size()) {
@@ -231,8 +223,7 @@ public class ToDoList extends JFrame {
             Task task = tasks.get(selectedIndex);
 
             if (!task.isFeito()) { // Verifica se a tarefa já não está concluída
-                if (JOptionPane.showConfirmDialog(null, "Deseja Concluir Esta Tarefa?",
-                        "Concluindo Tarefa...", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                if (JOptionPane.showConfirmDialog(null, "Deseja Concluir Esta Tarefa?", "Concluindo Tarefa...", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                     // Marca a task selecionada como concluída
                     task.setFeito(true);
                     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -250,8 +241,7 @@ public class ToDoList extends JFrame {
         String filter = (String) filterComboBox.getSelectedItem();
         listModel.clear();
         for (Task task : tasks) {
-            if (filter.equals("Todas") || (filter.equals("Ativas") && !task.isFeito())
-                    || (filter.equals("Concluídas") && task.isFeito())) {
+            if (filter.equals("Todas") || (filter.equals("Ativas") && !task.isFeito()) || (filter.equals("Concluídas") && task.isFeito())) {
                 listModel.addElement(task.getDescricao());
             }
         }
@@ -259,9 +249,7 @@ public class ToDoList extends JFrame {
 
     // Limpar tarefas concluídas (Botão Limpar Concluídas)
     private void clearCompletedTasks() {
-        if (JOptionPane.showConfirmDialog(null, "Deseja Excluir Todas as Tarefas Concluidas?",
-                "Excluindo Tarefa...", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-
+        if (JOptionPane.showConfirmDialog(null, "Deseja Excluir Todas as Tarefas Concluidas?", "Excluindo Tarefa...", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             List<Task> completedTasks = new ArrayList<>();
             for (Task task : tasks) {
                 if (task.isFeito()) {
@@ -279,9 +267,7 @@ public class ToDoList extends JFrame {
         // Atualiza a lista de tasks exibida na GUI
         listModel.clear();
         for (Task task : tasks) {
-            listModel.addElement(task.getDescricao()); // Removi o operador ternário pois a atualização de descrição
-                                                       // está no método 'markTaskDone' (não vai mais utilizar isFeito
-                                                       // na exibição, sua função será apenas lógica)
+            listModel.addElement(task.getDescricao()); // Removi o operador ternário pois a atualização de descrição está no método 'markTaskDone' (não vai mais utilizar isFeito na exibição, sua função será apenas lógica)
         }
     }
 
