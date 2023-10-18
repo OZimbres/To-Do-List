@@ -113,16 +113,17 @@ public class ToDoList extends JFrame {
         filterComboBox.addItemListener(e -> {
             filterTasks();
         });
+        //Tratamento de keyboard
         taskList.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
                 // Este método é chamado quando uma tecla é digitada (pressionada e liberada).
                 char keyChar = e.getKeyChar();
                 if (keyChar == KeyEvent.VK_DELETE) {
-                    // Se a tecla Enter for pressionada, adicione a tarefa
+                    // Se a tecla DELETE for pressionada, remova a tarefa
                     deleteTask();
                 } else if (keyChar == KeyEvent.VK_ENTER) {
-                    // Se a tecla Enter for pressionada, adicione a tarefa
+                    // Se a tecla Enter for pressionada, conclui a tarefa
                     markTaskDone();
                 }
             }
