@@ -45,7 +45,6 @@ public class ToDoList extends JFrame {
 
     // -----===CONSTRUTOR===-----//
     public ToDoList() {
-
         // Contrutor herdado
         super("To-Do List App");
 
@@ -135,25 +134,28 @@ public class ToDoList extends JFrame {
             }
         });
 
+        //Evento para editar tarefa (2 cliques)
         taskList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     int selectedIndex = taskList.getSelectedIndex();
-                    if (selectedIndex >= 0 && selectedIndex < tasks.size()) {
+
+                    //Try catch caso o item clicado dê como "Out of Bounds"
+                    try {
                         // Obtém a tarefa selecionada
                         Task selectedTask = tasks.get(selectedIndex);
-
                         // Abre uma janela de diálogo para editar informações da tarefa
                         String newDescription = JOptionPane.showInputDialog(ToDoList.this, "Editar Tarefa", selectedTask.getDescricao());
 
                         if (newDescription != null && !newDescription.isEmpty()) {
                             // Atualiza a descrição da tarefa
                             selectedTask.setDescricao(newDescription);
-
                             // Atualiza a lista de tarefas
                             updateTaskList();
                         }
+                    } catch (ArrayIndexOutOfBoundsException exception) {
+                        System.out.println(exception.getMessage());
                     }
                 }
             }
@@ -161,29 +163,22 @@ public class ToDoList extends JFrame {
 
         taskInputField.addKeyListener(new KeyListener() {
             @Override
-            public void keyTyped(KeyEvent e) {
-                // Este método é chamado quando uma tecla é digitada (pressionada e liberada).
+            public void keyTyped(KeyEvent e) { // Este método é chamado quando uma tecla é digitada (pressionada e liberada).
                 char keyChar = e.getKeyChar();
-                if (keyChar == KeyEvent.VK_ENTER) {
-                    // Se a tecla Enter for pressionada, adicione a tarefa
+                if (keyChar == KeyEvent.VK_ENTER) { // Se a tecla Enter for pressionada, adicione a tarefa
                     addTask();
                 }
             }
 
             @Override
-            public void keyPressed(KeyEvent e) {
-                // Este método é chamado quando uma tecla é pressionada.
-            }
-
+            public void keyPressed(KeyEvent e){} // Este método é chamado quando uma tecla é pressionada.
             @Override
-            public void keyReleased(KeyEvent e) {
-                // Este método é chamado quando uma tecla é liberada.
-            }
+            public void keyReleased(KeyEvent e){} // Este método é chamado quando uma tecla é liberada.
         });
 
         // -----===Configurações de Exibição===-----//
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(450, 300);
+        this.setSize(500, 300);
         this.setVisible(true);
     }
 
@@ -192,6 +187,7 @@ public class ToDoList extends JFrame {
     private void addTask() {
         // Adiciona uma nova task à lista de tasks
         String taskDescription = taskInputField.getText().trim();// remove espaços vazios
+
         if (!taskDescription.isEmpty()) {
             Task newTask = new Task(taskDescription);
             tasks.add(newTask);
@@ -200,7 +196,6 @@ public class ToDoList extends JFrame {
         } else {
             JOptionPane.showMessageDialog(null, "Adicione Uma Tarefa a Ser Feita!", "Alerta", JOptionPane.WARNING_MESSAGE);
         }
-
     }
 
     // Remover tarefa (Botão Remover)
@@ -208,9 +203,12 @@ public class ToDoList extends JFrame {
         if (JOptionPane.showConfirmDialog(null, "Deseja Excluir Essa Tarefa?", "Excluindo Tarefa...", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             // Exclui a task selecionada da lista de tasks
             int selectedIndex = taskList.getSelectedIndex();
-            if (selectedIndex >= 0 && selectedIndex < tasks.size()) {
+            //Try catch caso o item clicado dê como "Out of Bounds"
+            try {
                 tasks.remove(selectedIndex);
                 updateTaskList();
+            } catch (ArrayIndexOutOfBoundsException exception) {
+                System.out.println(exception.getMessage());
             }
         }
     }
@@ -219,7 +217,8 @@ public class ToDoList extends JFrame {
     private void markTaskDone() {
         int selectedIndex = taskList.getSelectedIndex();
 
-        if (selectedIndex >= 0 && selectedIndex < tasks.size()) {
+        //Try catch caso o item clicado dê como "Out of Bounds"
+        try {
             Task task = tasks.get(selectedIndex);
 
             if (!task.isFeito()) { // Verifica se a tarefa já não está concluída
@@ -232,6 +231,8 @@ public class ToDoList extends JFrame {
                     updateTaskList();
                 }
             }
+        } catch (ArrayIndexOutOfBoundsException exception) {
+            System.out.println(exception.getMessage());
         }
     }
 
@@ -276,5 +277,4 @@ public class ToDoList extends JFrame {
         // Exibe janela
         this.setVisible(true);
     }
-
 }
