@@ -37,7 +37,6 @@ public class TaskControl {
     public void deleteTask() {
         try {
             if(toDoList.getTasks().size() > 0){
-                
                 //Try catch caso o item clicado dê como "Out of Bounds"
                 try {
                     int selectedIndex = toDoList.getTaskList().getSelectedIndex();
