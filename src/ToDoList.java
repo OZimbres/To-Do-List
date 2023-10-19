@@ -155,24 +155,24 @@ public class ToDoList extends JFrame {
                         // Obtém a tarefa selecionada
                         Task selectedTask = tasks.get(selectedIndex);
                         // Abre uma janela de diálogo para editar informações da tarefa
-                        String newDescription = JOptionPane.showInputDialog(ToDoList.this, "Editar Tarefa", selectedTask.getDescricao());
+                        String newTitle = JOptionPane.showInputDialog(ToDoList.this, "Editar Tarefa", selectedTask.getTitulo());
 
                         //Try catch pra evitar a atualização da descrição sendo que está como null
                         try {
-                            if (!newDescription.isEmpty()) {
+                            if (!newTitle.isEmpty()) {
                                 // Atualiza a descrição da tarefa
-                                selectedTask.setDescricao(newDescription);
+                                selectedTask.setTitulo(newTitle);
                                 // Atualiza a lista de tarefas
                                 taskControl.updateTaskList();
                             }
                             else{
-                                while (newDescription.isEmpty()) {
-                                    JOptionPane.showMessageDialog(buttonPanel, "O campo deve ser preenchido", newDescription, selectedIndex, null);
+                                while (newTitle.isEmpty()) {
+                                    JOptionPane.showMessageDialog(buttonPanel, "O campo deve ser preenchido", newTitle, selectedIndex, null);
                                     
-                                    newDescription = JOptionPane.showInputDialog(ToDoList.this, "Editar Tarefa", selectedTask.getDescricao());
+                                    newTitle = JOptionPane.showInputDialog(ToDoList.this, "Editar Tarefa", selectedTask.getTitulo());
                                     
                                     // Atualiza a descrição da tarefa
-                                    selectedTask.setDescricao(newDescription);
+                                    selectedTask.setTitulo(newTitle);
                                     // Atualiza a lista de tarefas
                                     taskControl.updateTaskList();
                                 }
