@@ -1,9 +1,9 @@
 
 //-----===IMPORTAÇÕES===-----//
 import java.awt.BorderLayout;
+import java.awt.Cursor;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -21,10 +21,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
-import java.text.SimpleDateFormat;
 
 public class ToDoList extends JFrame {
     // -----===ATRIBUTOS===-----//
+    //Importação dos métodos
+    TaskControl taskControl = new TaskControl(this);
+
     // Atributos 'comuns'
     private JPanel mainPanel; // Painel Principal
     private JTextField taskInputField; // Campo para Nomear Tarefa
@@ -45,7 +47,6 @@ public class ToDoList extends JFrame {
 
     // -----===CONSTRUTOR===-----//
     public ToDoList() {
-
         // Contrutor herdado
         super("To-Do List App");
 
@@ -61,11 +62,21 @@ public class ToDoList extends JFrame {
 
         // Inicializa campos de entrada, botões e JComboBox
         taskInputField = new JTextField(); // Campo para Nomear Tarefa
+        
         addButton = new JButton("Adicionar"); // Botão Adicionar
-        deleteButton = new JButton("Excluir"); /// Botão Excluir
-        markDoneButton = new JButton("Concluir"); /// Botão Concluir
-        filterComboBox = new JComboBox<>(new String[] { "Todas", "Ativas", "Concluídas" }); // Combo Box
+        addButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); //Botão Adicionar com cursor de maozinha
+        
+        deleteButton = new JButton("Excluir"); // Botão Excluir
+        deleteButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); //Botão Excluir com cursor de maozinha
+        
+        markDoneButton = new JButton("Concluir"); // Botão Concluir
+        markDoneButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); //Botão Concluir com cursor de maozinha
+
+        filterComboBox = new JComboBox<>(new String[] { "Todas", "Ativas", "Concluídas" }); //ComboBox
+        filterComboBox.setCursor(new Cursor(Cursor.HAND_CURSOR)); //ComboBox com cursor de maozinha
+
         clearCompletedButton = new JButton("Limpar Concluídas"); // Botão Limpar Concluídas
+        clearCompletedButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); //Botão Limpar Concluídas com cursor de maozinha
 
         // Configuração do painel de entrada (Painel Superior)
         JPanel inputPanel = new JPanel(new BorderLayout()); // Painel
@@ -80,214 +91,144 @@ public class ToDoList extends JFrame {
         buttonPanel.add(clearCompletedButton); // Botão Limpar Concluídas
 
         // Adiciona os componentes ao painel principal (Exibe tarefas)
-        mainPanel.add(inputPanel, BorderLayout.NORTH); // Jogando painel de inserção de tarefas pra cima ('inputPanel'
-                                                       // está dentro de 'mainPanel')
-        mainPanel.add(new JScrollPane(taskList), BorderLayout.CENTER); // Jogando painel de exibição das tarefas pra
-                                                                       // centro (colocando taskList (Lista ?) como
-                                                                       // scrollPanel)
-        mainPanel.add(buttonPanel, BorderLayout.SOUTH); // Jogando painel dos botões de controle pra baixo
-                                                        // ('buttonPanel' está dentro de 'mainPanel')
+        mainPanel.add(inputPanel, BorderLayout.NORTH); // Jogando painel de inserção de tarefas pra cima ('inputPanel' está dentro de 'mainPanel')
+        mainPanel.add(new JScrollPane(taskList), BorderLayout.CENTER); // Jogando painel de exibição das tarefas pra centro (colocando taskList (Lista ?) como scrollPanel)
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH); // Jogando painel dos botões de controle pra baixo ('buttonPanel' está dentro de 'mainPanel')
 
         // Adiciona o painel principal à janela
         this.add(mainPanel);
 
         // -----===EVENT LISTENER===-----//
         // ---=Eventos Simples=---//
-        // Tratamento de botão
+        // Tratamento de Botão
         addButton.addActionListener(e -> { // Evento para adicionar item
-            addTask();
+            taskControl.addTask();
         });
         // Tratamento de Botão
         deleteButton.addActionListener(e -> { // Evento para excluir item
-            deleteTask();
+            taskControl.deleteTask();
         });
         // Tratamento de Botão
         markDoneButton.addActionListener(e -> { // Evento para marcar Tarefa como Concluída
-            markTaskDone();
+            taskControl.markTaskDone();
         });
         // Tratamento de Botão
         clearCompletedButton.addActionListener(e -> { // Evento para limpar Tarefa Concluída
-            clearCompletedTasks();
+            taskControl.clearCompletedTasks();
         });
+
         // Tratamento de Item(JComboBox)
         filterComboBox.addItemListener(e -> {
-            filterTasks();
+            taskControl.filterTasks();
         });
+
+        //Tratamento de keyboard
         taskList.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
                 // Este método é chamado quando uma tecla é digitada (pressionada e liberada).
                 char keyChar = e.getKeyChar();
                 if (keyChar == KeyEvent.VK_DELETE) {
-                    // Se a tecla Enter for pressionada, adicione a tarefa
-                    deleteTask();
+                    // Se a tecla DELETE for pressionada, remova a tarefa
+                    taskControl.deleteTask();
                 } else if (keyChar == KeyEvent.VK_ENTER) {
-                    // Se a tecla Enter for pressionada, adicione a tarefa
-                    markTaskDone();
+                    // Se a tecla Enter for pressionada, conclui a tarefa
+                    taskControl.markTaskDone();
                 }
             }
-
             @Override
-            public void keyPressed(KeyEvent e) {
-                // Este método é chamado quando uma tecla é pressionada.
-            }
-
+            public void keyPressed(KeyEvent e) {} // Este método é chamado quando uma tecla é pressionada.
             @Override
-            public void keyReleased(KeyEvent e) {
-                // Este método é chamado quando uma tecla é liberada.
-            }
+            public void keyReleased(KeyEvent e) {} // Este método é chamado quando uma tecla é liberada.
         });
 
+        //Tratamento de mouse
+        //Evento para editar tarefa (2 cliques)
         taskList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     int selectedIndex = taskList.getSelectedIndex();
-                    if (selectedIndex >= 0 && selectedIndex < tasks.size()) {
+
+                    //Try catch caso o item clicado dê como "Out of Bounds"
+                    try {
                         // Obtém a tarefa selecionada
                         Task selectedTask = tasks.get(selectedIndex);
-
                         // Abre uma janela de diálogo para editar informações da tarefa
-                        String newDescription = JOptionPane.showInputDialog(
-                                ToDoList.this, "Editar Tarefa", selectedTask.getDescricao());
+                        String newDescription = JOptionPane.showInputDialog(ToDoList.this, "Editar Tarefa", selectedTask.getDescricao());
 
-                        if (newDescription != null && !newDescription.isEmpty()) {
-                            // Atualiza a descrição da tarefa
-                            selectedTask.setDescricao(newDescription);
-
-                            // Atualiza a lista de tarefas
-                            updateTaskList();
+                        //Try catch pra evitar a atualização da descrição sendo que está como null
+                        try {
+                            if (!newDescription.isEmpty()) {
+                                // Atualiza a descrição da tarefa
+                                selectedTask.setDescricao(newDescription);
+                                // Atualiza a lista de tarefas
+                                taskControl.updateTaskList();
+                            }
+                            else{
+                                while (newDescription.isEmpty()) {
+                                    JOptionPane.showMessageDialog(buttonPanel, "O campo deve ser preenchido", newDescription, selectedIndex, null);
+                                    
+                                    newDescription = JOptionPane.showInputDialog(ToDoList.this, "Editar Tarefa", selectedTask.getDescricao());
+                                    
+                                    // Atualiza a descrição da tarefa
+                                    selectedTask.setDescricao(newDescription);
+                                    // Atualiza a lista de tarefas
+                                    taskControl.updateTaskList();
+                                }
+                            }                          
+                        } catch (NullPointerException exception) {
+                            //Não é necesário exibir o erro, apenas indicar ao usuário que a ação foi interrompida
+                            JOptionPane.showMessageDialog(null, "Ação Cancelada");
                         }
+                    } catch (ArrayIndexOutOfBoundsException exception) {
+                        JOptionPane.showMessageDialog(null, exception.getMessage());
                     }
                 }
             }
         });
 
+        //Tratamento de keyboard
         taskInputField.addKeyListener(new KeyListener() {
             @Override
-            public void keyTyped(KeyEvent e) {
-                // Este método é chamado quando uma tecla é digitada (pressionada e liberada).
+            public void keyTyped(KeyEvent e) { // Este método é chamado quando uma tecla é digitada (pressionada e liberada).
                 char keyChar = e.getKeyChar();
-                if (keyChar == KeyEvent.VK_ENTER) {
-                    // Se a tecla Enter for pressionada, adicione a tarefa
-                    addTask();
+                if (keyChar == KeyEvent.VK_ENTER) { // Se a tecla Enter for pressionada, adicione a tarefa
+                    taskControl.addTask();
                 }
             }
-
             @Override
-            public void keyPressed(KeyEvent e) {
-                // Este método é chamado quando uma tecla é pressionada.
-            }
-
+            public void keyPressed(KeyEvent e){} // Este método é chamado quando uma tecla é pressionada.
             @Override
-            public void keyReleased(KeyEvent e) {
-                // Este método é chamado quando uma tecla é liberada.
-            }
+            public void keyReleased(KeyEvent e){} // Este método é chamado quando uma tecla é liberada.
         });
 
         // -----===Configurações de Exibição===-----//
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(450, 300);
+        this.setBounds(700, 300, 500, 400);
         this.setVisible(true);
     }
 
+    //-----===GETTERS & SETTERS===-----//
+    public JTextField getTaskInputField(){
+        return taskInputField;
+    }
+    public JComboBox<String> getFilterComboBox(){
+        return filterComboBox;
+    }
+    public JList<String> getTaskList(){
+        return taskList;
+    }
+    public DefaultListModel<String> getListModel(){
+        return listModel;
+    }
+    public List<Task> getTasks(){
+        return tasks;
+    }
     // -----===MÉTODOS===-----//
-    // Adicionar tarefa (Botão Adicionar)
-    private void addTask() {
-        // Adiciona uma nova task à lista de tasks
-        String taskDescription = taskInputField.getText().trim();// remove espaços vazios
-        if (!taskDescription.isEmpty()) {
-            Task newTask = new Task(taskDescription);
-            tasks.add(newTask);
-            updateTaskList();
-            taskInputField.setText("");
-        } else {
-            JOptionPane.showMessageDialog(null, "Adicione Uma Tarefa a Ser Feita!", "Alerta",
-                    JOptionPane.WARNING_MESSAGE);
-        }
-
-    }
-
-    // Remover tarefa (Botão Remover)
-    private void deleteTask() {
-        if (JOptionPane.showConfirmDialog(null, "Deseja Excluir Essa Tarefa?",
-                "Excluindo Tarefa...", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-
-            // Exclui a task selecionada da lista de tasks
-            int selectedIndex = taskList.getSelectedIndex();
-            if (selectedIndex >= 0 && selectedIndex < tasks.size()) {
-                tasks.remove(selectedIndex);
-                updateTaskList();
-            }
-        }
-    }
-
-    // botão para marcar as tasks como concluidas
-    private void markTaskDone() {
-        int selectedIndex = taskList.getSelectedIndex();
-
-        if (selectedIndex >= 0 && selectedIndex < tasks.size()) {
-            Task task = tasks.get(selectedIndex);
-
-            if (!task.isFeito()) { // Verifica se a tarefa já não está concluída
-                if (JOptionPane.showConfirmDialog(null, "Deseja Concluir Esta Tarefa?",
-                        "Concluindo Tarefa...", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                    // Marca a task selecionada como concluída
-                    task.setFeito(true);
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-                    String dataConclusao = dateFormat.format(new Date()); // Obtém a data e hora atuais
-                    task.setDescricao(task.getDescricao() + " (Concluída em " + dataConclusao + ") \u2714");
-                    updateTaskList();
-                }
-            }
-        }
-    }
-
-    // Filtrar tarefas (ComboBox)
-    private void filterTasks() {
-        // Filtra as tasks com base na seleção do JComboBox
-        String filter = (String) filterComboBox.getSelectedItem();
-        listModel.clear();
-        for (Task task : tasks) {
-            if (filter.equals("Todas") || (filter.equals("Ativas") && !task.isFeito())
-                    || (filter.equals("Concluídas") && task.isFeito())) {
-                listModel.addElement(task.getDescricao());
-            }
-        }
-    }
-
-    // Limpar tarefas concluídas (Botão Limpar Concluídas)
-    private void clearCompletedTasks() {
-        if (JOptionPane.showConfirmDialog(null, "Deseja Excluir Todas as Tarefas Concluidas?",
-                "Excluindo Tarefa...", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-
-            List<Task> completedTasks = new ArrayList<>();
-            for (Task task : tasks) {
-                if (task.isFeito()) {
-                    completedTasks.add(task);
-                }
-            }
-            tasks.removeAll(completedTasks);
-            updateTaskList();
-        }
-
-    }
-
-    // Método pra atualizar exibição
-    private void updateTaskList() {
-        // Atualiza a lista de tasks exibida na GUI
-        listModel.clear();
-        for (Task task : tasks) {
-            listModel.addElement(task.getDescricao()); // Removi o operador ternário pois a atualização de descrição
-                                                       // está no método 'markTaskDone' (não vai mais utilizar isFeito
-                                                       // na exibição, sua função será apenas lógica)
-        }
-    }
-
     // Método para rodar janela (atualizar exibição)
     public void run() {
         // Exibe janela
         this.setVisible(true);
     }
-
 }
