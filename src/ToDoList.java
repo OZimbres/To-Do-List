@@ -160,13 +160,26 @@ public class ToDoList extends JFrame {
                         //Try catch pra evitar a atualização da descrição sendo que está como null
                         try {
                             if (!newDescription.isEmpty()) {
-                            // Atualiza a descrição da tarefa
-                            selectedTask.setDescricao(newDescription);
-                            // Atualiza a lista de tarefas
-                            taskControl.updateTaskList();
-                        }
+                                // Atualiza a descrição da tarefa
+                                selectedTask.setDescricao(newDescription);
+                                // Atualiza a lista de tarefas
+                                taskControl.updateTaskList();
+                            }
+                            else{
+                                while (newDescription.isEmpty()) {
+                                    JOptionPane.showMessageDialog(buttonPanel, "O campo deve ser preenchido", newDescription, selectedIndex, null);
+                                    
+                                    newDescription = JOptionPane.showInputDialog(ToDoList.this, "Editar Tarefa", selectedTask.getDescricao());
+                                    
+                                    // Atualiza a descrição da tarefa
+                                    selectedTask.setDescricao(newDescription);
+                                    // Atualiza a lista de tarefas
+                                    taskControl.updateTaskList();
+                                }
+                            }                          
                         } catch (NullPointerException exception) {
-                            JOptionPane.showMessageDialog(null, exception.getMessage());
+                            //Não é necesário exibir o erro, apenas indicar ao usuário que a ação foi interrompida
+                            JOptionPane.showMessageDialog(null, "Ação Cancelada");
                         }
                     } catch (ArrayIndexOutOfBoundsException exception) {
                         JOptionPane.showMessageDialog(null, exception.getMessage());
@@ -192,7 +205,7 @@ public class ToDoList extends JFrame {
 
         // -----===Configurações de Exibição===-----//
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(500, 300);
+        this.setBounds(700, 300, 500, 400);
         this.setVisible(true);
     }
 

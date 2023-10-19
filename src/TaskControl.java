@@ -36,13 +36,20 @@ public class TaskControl {
     // Remover tarefa (Botão Remover)
     public void deleteTask() {
         try {
-            if (JOptionPane.showConfirmDialog(null, "Deseja Excluir Essa Tarefa?", "Excluindo Tarefa...", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                // Exclui a task selecionada da lista de tasks
-                int selectedIndex = toDoList.getTaskList().getSelectedIndex();
+            if(toDoList.getTasks().size() > 0){
                 //Try catch caso o item clicado dê como "Out of Bounds"
                 try {
-                    toDoList.getTasks().remove(selectedIndex);
-                    updateTaskList();
+                    int selectedIndex = toDoList.getTaskList().getSelectedIndex();
+                    if(selectedIndex != -1){
+                        if (JOptionPane.showConfirmDialog(null, "Deseja Excluir Essa Tarefa?", "Excluindo Tarefa...", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                            // Exclui a task selecionada da lista de tasks
+                            toDoList.getTasks().remove(selectedIndex);
+                            updateTaskList();
+                        }
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "Selecione alguma tarefa.");
+                    }
                 } catch (ArrayIndexOutOfBoundsException exception) {
                     JOptionPane.showMessageDialog(null, exception.getMessage());
                 }
@@ -54,10 +61,10 @@ public class TaskControl {
 
     // botão para marcar as tasks como concluidas
     public void markTaskDone() {
-        int selectedIndex = toDoList.getTaskList().getSelectedIndex();
-
         //Try catch caso o item clicado dê como "Out of Bounds"
         try {
+            int selectedIndex = toDoList.getTaskList().getSelectedIndex();
+
             Task task = toDoList.getTasks().get(selectedIndex);
 
             if (!task.isFeito()) { // Verifica se a tarefa já não está concluída
@@ -70,8 +77,9 @@ public class TaskControl {
                     updateTaskList();
                 }
             }
-        } catch (ArrayIndexOutOfBoundsException exception) {
-            JOptionPane.showMessageDialog(null, exception.getMessage());
+        } catch (IndexOutOfBoundsException exception) {
+            //Não é necesário exibir o erro, apenas indicar ao usuário que a ação foi interrompida
+            JOptionPane.showMessageDialog(null, "É necessário selecionar uma tarefa!");
         }
     }
 
@@ -89,16 +97,32 @@ public class TaskControl {
 
     // Limpar tarefas concluídas (Botão Limpar Concluídas)
     public void clearCompletedTasks() {
-        if (JOptionPane.showConfirmDialog(null, "Deseja Excluir Todas as Tarefas Concluidas?", "Excluindo Tarefa...", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-            List<Task> completedTasks = new ArrayList<>();
-            for (Task task : toDoList.getTasks()) {
-                if (task.isFeito()) {
-                    completedTasks.add(task);
+        try {
+            //Contador para verificar se há tarefa concluída ou não
+            boolean temConcluida = false;
+            for (Task tarefa : toDoList.getTasks()) {
+                if(tarefa.isFeito()){
+                    temConcluida = true;
+                    break;
                 }
             }
-            toDoList.getTasks().removeAll(completedTasks);
-            updateTaskList();
-        }
+
+            if(temConcluida){
+                if (JOptionPane.showConfirmDialog(null, "Deseja Excluir Todas as Tarefas Concluidas?", "Excluindo Tarefa...", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    List<Task> completedTasks = new ArrayList<>();
+                    for (Task task : toDoList.getTasks()) {
+                        if (task.isFeito()) {
+                            completedTasks.add(task);
+                        }
+                    }
+                    toDoList.getTasks().removeAll(completedTasks);
+                    updateTaskList();
+                }
+            }
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }      
     }
 
     // Método pra atualizar exibição
