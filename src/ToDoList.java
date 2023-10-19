@@ -148,11 +148,16 @@ public class ToDoList extends JFrame {
                         // Abre uma janela de diálogo para editar informações da tarefa
                         String newDescription = JOptionPane.showInputDialog(ToDoList.this, "Editar Tarefa", selectedTask.getDescricao());
 
-                        if (newDescription != null && !newDescription.isEmpty()) {
+                        //Try catch pra evitar a atualização da descrição sendo que está como null
+                        try {
+                            if (!newDescription.isEmpty()) {
                             // Atualiza a descrição da tarefa
                             selectedTask.setDescricao(newDescription);
                             // Atualiza a lista de tarefas
                             updateTaskList();
+                        }
+                        } catch (NullPointerException exception) {
+                            System.out.println(exception.getMessage());
                         }
                     } catch (ArrayIndexOutOfBoundsException exception) {
                         System.out.println(exception.getMessage());
