@@ -98,15 +98,30 @@ public class TaskControl {
 
     // Limpar tarefas concluídas (Botão Limpar Concluídas)
     public void clearCompletedTasks() {
-        if (JOptionPane.showConfirmDialog(null, "Deseja Excluir Todas as Tarefas Concluidas?", "Excluindo Tarefa...", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-            List<Task> completedTasks = new ArrayList<>();
-            for (Task task : toDoList.getTasks()) {
-                if (task.isFeito()) {
-                    completedTasks.add(task);
+        try {
+            //Contador pra verificar se tem tarefa concluida
+            boolean temConcluida = false;
+            for (Task tarefa : toDoList.getTasks()) {  
+                if(tarefa.isFeito()){
+                    temConcluida = true;
+                    break;
                 }
             }
-            toDoList.getTasks().removeAll(completedTasks);
-            updateTaskList();
+
+            if(temConcluida){
+                if (JOptionPane.showConfirmDialog(null, "Deseja Excluir Todas as Tarefas Concluidas?", "Excluindo Tarefa...", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    List<Task> completedTasks = new ArrayList<>();
+                    for (Task task : toDoList.getTasks()) {
+                        if (task.isFeito()) {
+                            completedTasks.add(task);
+                        }
+                    }
+                    toDoList.getTasks().removeAll(completedTasks);
+                    updateTaskList();
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
 
