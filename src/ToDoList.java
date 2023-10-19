@@ -27,6 +27,8 @@ public class ToDoList extends JFrame {
     //Importação dos métodos
     TaskControl taskControl = new TaskControl(this); //Métodos (lógica)
     EditTask editTask = new EditTask(this);
+    Task task = new Task();
+    
 
     // Atributos 'comuns'
     private JPanel mainPanel; // Painel Principal
@@ -151,7 +153,20 @@ public class ToDoList extends JFrame {
                 if (e.getClickCount() == 2) {
                     //Try catch caso o item clicado dê como "Out of Bounds"
                     try {
-                        editTask.run();
+                        int selectedIndex = taskList.getSelectedIndex();
+
+                        //Opções da janela
+                        Object[] opcoes = {"OK", "EDITAR"};
+                        try {
+                            int resposta = JOptionPane.showOptionDialog(null, (tasks.get(selectedIndex).getTitulo() +"\nDescrição: "+ tasks.get(selectedIndex).getDescricao()), "TAREFA", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
+
+                            if(resposta == JOptionPane.NO_OPTION){
+                                editTask.run();
+                            }
+                        } catch (Exception exception) {
+                            JOptionPane.showMessageDialog(null, exception.getMessage());
+                        }
+
                     } catch (ArrayIndexOutOfBoundsException exception) {
                         JOptionPane.showMessageDialog(null, exception.getMessage());
                     }

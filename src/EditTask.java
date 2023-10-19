@@ -26,6 +26,9 @@ public class EditTask extends JFrame {
     JButton concluir = new JButton("Concluir"); //Concluir
     JButton cancelar = new JButton("Cancelar"); //Cancelar
 
+    //Dados da tarefa
+    Task task = new Task();
+
     ArrayList<JComponent> componentes = new ArrayList<JComponent>(){
         {
             add(exibirDataCriacao);
@@ -70,6 +73,14 @@ public class EditTask extends JFrame {
                 case 0, 1:
                     //"Criando" JLabel
                     JLabel label = (JLabel) componentes.get(i);
+                    
+                    if(i == 1){
+                        label.setText(task.getDataCriacao());
+                    }
+                    else{
+                        label.setText(task.getDataConclusao());
+                    }
+
                     //Adicionando item ao painel
                     mainPanel.add(label, elemento);
                     break;
