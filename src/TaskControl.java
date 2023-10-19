@@ -54,10 +54,10 @@ public class TaskControl {
 
     // botão para marcar as tasks como concluidas
     public void markTaskDone() {
-        int selectedIndex = toDoList.getTaskList().getSelectedIndex();
-
         //Try catch caso o item clicado dê como "Out of Bounds"
         try {
+            int selectedIndex = toDoList.getTaskList().getSelectedIndex();
+
             Task task = toDoList.getTasks().get(selectedIndex);
 
             if (!task.isFeito()) { // Verifica se a tarefa já não está concluída
@@ -70,8 +70,9 @@ public class TaskControl {
                     updateTaskList();
                 }
             }
-        } catch (ArrayIndexOutOfBoundsException exception) {
-            JOptionPane.showMessageDialog(null, exception.getMessage());
+        } catch (IndexOutOfBoundsException exception) {
+            //Não é necesário exibir o erro, apenas indicar ao usuário que a ação foi interrompida
+            JOptionPane.showMessageDialog(null, "É necessário selecionar uma tarefa!");
         }
     }
 

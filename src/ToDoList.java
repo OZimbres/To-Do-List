@@ -178,7 +178,8 @@ public class ToDoList extends JFrame {
                                 }
                             }                          
                         } catch (NullPointerException exception) {
-                            JOptionPane.showMessageDialog(null, exception.getMessage());
+                            //Não é necesário exibir o erro, apenas indicar ao usuário que a ação foi interrompida
+                            JOptionPane.showMessageDialog(null, "Ação Cancelada");
                         }
                     } catch (ArrayIndexOutOfBoundsException exception) {
                         JOptionPane.showMessageDialog(null, exception.getMessage());
