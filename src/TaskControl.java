@@ -36,13 +36,21 @@ public class TaskControl {
     // Remover tarefa (Botão Remover)
     public void deleteTask() {
         try {
-            if (JOptionPane.showConfirmDialog(null, "Deseja Excluir Essa Tarefa?", "Excluindo Tarefa...", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                // Exclui a task selecionada da lista de tasks
-                int selectedIndex = toDoList.getTaskList().getSelectedIndex();
+            if(toDoList.getTasks().size() > 0){
+                
                 //Try catch caso o item clicado dê como "Out of Bounds"
                 try {
-                    toDoList.getTasks().remove(selectedIndex);
-                    updateTaskList();
+                    int selectedIndex = toDoList.getTaskList().getSelectedIndex();
+                    if(selectedIndex != -1){
+                        if (JOptionPane.showConfirmDialog(null, "Deseja Excluir Essa Tarefa?", "Excluindo Tarefa...", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                            // Exclui a task selecionada da lista de tasks
+                            toDoList.getTasks().remove(selectedIndex);
+                            updateTaskList();
+                        }
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "Selecione alguma tarefa.");
+                    }
                 } catch (ArrayIndexOutOfBoundsException exception) {
                     JOptionPane.showMessageDialog(null, exception.getMessage());
                 }
