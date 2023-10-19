@@ -25,7 +25,8 @@ import java.awt.event.MouseAdapter;
 public class ToDoList extends JFrame {
     // -----===ATRIBUTOS===-----//
     //Importação dos métodos
-    TaskControl taskControl = new TaskControl(this);
+    TaskControl taskControl = new TaskControl(this); //Métodos (lógica)
+    EditTask editTask = new EditTask(this);
 
     // Atributos 'comuns'
     private JPanel mainPanel; // Painel Principal
@@ -148,39 +149,9 @@ public class ToDoList extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    int selectedIndex = taskList.getSelectedIndex();
-
                     //Try catch caso o item clicado dê como "Out of Bounds"
                     try {
-                        // Obtém a tarefa selecionada
-                        Task selectedTask = tasks.get(selectedIndex);
-                        // Abre uma janela de diálogo para editar informações da tarefa
-                        String newTitle = JOptionPane.showInputDialog(ToDoList.this, "Editar Tarefa", selectedTask.getTitulo());
-
-                        //Try catch pra evitar a atualização da descrição sendo que está como null
-                        try {
-                            if (!newTitle.isEmpty()) {
-                                // Atualiza a descrição da tarefa
-                                selectedTask.setTitulo(newTitle);
-                                // Atualiza a lista de tarefas
-                                taskControl.updateTaskList();
-                            }
-                            else{
-                                while (newTitle.isEmpty()) {
-                                    JOptionPane.showMessageDialog(buttonPanel, "O campo deve ser preenchido", newTitle, selectedIndex, null);
-                                    
-                                    newTitle = JOptionPane.showInputDialog(ToDoList.this, "Editar Tarefa", selectedTask.getTitulo());
-                                    
-                                    // Atualiza a descrição da tarefa
-                                    selectedTask.setTitulo(newTitle);
-                                    // Atualiza a lista de tarefas
-                                    taskControl.updateTaskList();
-                                }
-                            }                          
-                        } catch (NullPointerException exception) {
-                            //Não é necesário exibir o erro, apenas indicar ao usuário que a ação foi interrompida
-                            JOptionPane.showMessageDialog(null, "Ação Cancelada");
-                        }
+                        editTask.run();
                     } catch (ArrayIndexOutOfBoundsException exception) {
                         JOptionPane.showMessageDialog(null, exception.getMessage());
                     }
