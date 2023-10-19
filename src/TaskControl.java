@@ -17,11 +17,11 @@ public class TaskControl {
     // Adicionar tarefa (Botão Adicionar)
     public void addTask() {
         // Adiciona uma nova task à lista de tasks
-        String taskDescription = toDoList.getTaskInputField().getText().trim();// remove espaços vazios
+        String taskTitle = toDoList.getTaskInputField().getText().trim();// remove espaços vazios
 
         try {
-            if (!taskDescription.isEmpty()) {
-                Task newTask = new Task(taskDescription);
+            if (!taskTitle.isEmpty()) {
+                Task newTask = new Task(taskTitle);
                 toDoList.getTasks().add(newTask);
                 updateTaskList();
                 toDoList.getTaskInputField().setText("");
@@ -73,7 +73,8 @@ public class TaskControl {
                     task.setFeito(true);
                     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                     String dataConclusao = dateFormat.format(new Date()); // Obtém a data e hora atuais
-                    task.setDescricao(task.getDescricao() + " (Concluída em " + dataConclusao + ") \u2714");
+                    task.setDataConclusao(dataConclusao);
+                    task.setTitulo(task.getTitulo() + "\u2714");
                     updateTaskList();
                 }
             }
@@ -90,7 +91,7 @@ public class TaskControl {
         toDoList.getListModel().clear();
         for (Task task : toDoList.getTasks()) {
             if (filter.equals("Todas") || (filter.equals("Ativas") && !task.isFeito()) || (filter.equals("Concluídas") && task.isFeito())) {
-                toDoList.getListModel().addElement(task.getDescricao());
+                toDoList.getListModel().addElement(task.getTitulo());
             }
         }
     }
@@ -130,7 +131,7 @@ public class TaskControl {
         // Atualiza a lista de tasks exibida na GUI
         toDoList.getListModel().clear();
         for (Task task : toDoList.getTasks()) {
-            toDoList.getListModel().addElement(task.getDescricao()); // Removi o operador ternário pois a atualização de descrição está no método 'markTaskDone' (não vai mais utilizar isFeito na exibição, sua função será apenas lógica)
+            toDoList.getListModel().addElement(task.getTitulo()); // Removi o operador ternário pois a atualização de descrição está no método 'markTaskDone' (não vai mais utilizar isFeito na exibição, sua função será apenas lógica)
         }
     }
 }

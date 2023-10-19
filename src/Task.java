@@ -1,15 +1,38 @@
 //Classe pra guardar as tarefas
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Task {
     //Atributos
+    private String titulo;
     private String descricao;
     private boolean feito;
     private String dataCriacao;
     private String dataConclusao;
 
+    //Construtor vazio
+    public Task() {
+        //Adicionando hora da criação
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        this.dataCriacao = dateFormat.format(new Date()); // Obtém a data e hora atuais
+    }
     //Construtor
-    public Task(String descricao) {
-        this.descricao = descricao;
+    public Task(String titulo) {
+        this.titulo = titulo;
+        this.descricao = "";
         this.feito = false; //Nenhuma tarefa começa concluída, por isso o false
+        //Adicionando hora da criação
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        this.dataCriacao = dateFormat.format(new Date()); // Obtém a data e hora atuais
+    }
+
+    //Get & Set Descrição
+    public String getTitulo() {
+        return titulo;
+    }
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
     //Get & Set Descrição

@@ -25,7 +25,10 @@ import java.awt.event.MouseAdapter;
 public class ToDoList extends JFrame {
     // -----===ATRIBUTOS===-----//
     //Importação dos métodos
-    TaskControl taskControl = new TaskControl(this);
+    TaskControl taskControl = new TaskControl(this); //Métodos (lógica)
+    EditTask editTask = new EditTask(this);
+    Task task = new Task();
+    
 
     // Atributos 'comuns'
     private JPanel mainPanel; // Painel Principal
@@ -148,39 +151,22 @@ public class ToDoList extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    int selectedIndex = taskList.getSelectedIndex();
-
                     //Try catch caso o item clicado dê como "Out of Bounds"
                     try {
-                        // Obtém a tarefa selecionada
-                        Task selectedTask = tasks.get(selectedIndex);
-                        // Abre uma janela de diálogo para editar informações da tarefa
-                        String newDescription = JOptionPane.showInputDialog(ToDoList.this, "Editar Tarefa", selectedTask.getDescricao());
+                        int selectedIndex = taskList.getSelectedIndex();
 
-                        //Try catch pra evitar a atualização da descrição sendo que está como null
+                        //Opções da janela
+                        Object[] opcoes = {"OK", "EDITAR"};
                         try {
-                            if (!newDescription.isEmpty()) {
-                                // Atualiza a descrição da tarefa
-                                selectedTask.setDescricao(newDescription);
-                                // Atualiza a lista de tarefas
-                                taskControl.updateTaskList();
+                            int resposta = JOptionPane.showOptionDialog(null, (tasks.get(selectedIndex).getTitulo() +"\nDescrição: "+ tasks.get(selectedIndex).getDescricao()), "TAREFA", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
+
+                            if(resposta == JOptionPane.NO_OPTION){
+                                editTask.run();
                             }
-                            else{
-                                while (newDescription.isEmpty()) {
-                                    JOptionPane.showMessageDialog(buttonPanel, "O campo deve ser preenchido", newDescription, selectedIndex, null);
-                                    
-                                    newDescription = JOptionPane.showInputDialog(ToDoList.this, "Editar Tarefa", selectedTask.getDescricao());
-                                    
-                                    // Atualiza a descrição da tarefa
-                                    selectedTask.setDescricao(newDescription);
-                                    // Atualiza a lista de tarefas
-                                    taskControl.updateTaskList();
-                                }
-                            }                          
-                        } catch (NullPointerException exception) {
-                            //Não é necesário exibir o erro, apenas indicar ao usuário que a ação foi interrompida
-                            JOptionPane.showMessageDialog(null, "Ação Cancelada");
+                        } catch (Exception exception) {
+                            JOptionPane.showMessageDialog(null, exception.getMessage());
                         }
+
                     } catch (ArrayIndexOutOfBoundsException exception) {
                         JOptionPane.showMessageDialog(null, exception.getMessage());
                     }
